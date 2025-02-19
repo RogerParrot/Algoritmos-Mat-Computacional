@@ -21,15 +21,20 @@ def Lagrange(x, x_tab, y_tab):
         
         for j in range(n):
             if i != j:  
-                l *= (x - x_tab[j]) / (x_tab[i] - x_tab[j])
+                l *= (x - x_tab[j]) / (x_tab[i] - x_tab[j]) # fórmula principal de lagrange
                 
         soma += y_tab[i] * l
         
     return soma
 
 # Exemplo de uso
-x_tab = np.array([-1., 0., 2.])  # Pontos x de exemplo
-y_tab = np.array([4., 1., -1.])  # Valores y correspondentes
+x_tab = np.array([-1., 0., 2.])  # Pontos x de exemplo       --> x0, x1, x2
+y_tab = np.array([4., 1., -1.])  # Valores y correspondentes --> y0, y1, y2
+
+# 1° grau - 2 pontos
+# 2° grau - 3 pontos
+# 3° grau - 4 pontos
+# ...
 
 # Criar pontos para plotagem suave
 x_plot = np.linspace(min(x_tab)-0.5, max(x_tab)+0.5, 1000)
