@@ -12,7 +12,7 @@ def fatoracao_LU(A, b):
     L = [[0] * n for _ in range(n)]
     U = [[0] * n for _ in range(n)]
 
-    # Decomposição LU: matriz Lower e Upper
+    # Decomposição LU (Eliminação de Gauss)
     for i in range(n):
         for j in range(i, n):
             U[i][j] = A[i][j] - sum(L[i][k] * U[k][j] for k in range(i))
