@@ -1,14 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 def Lagrange(x, x_tab, y_tab):
+    """
+    Calcula o valor do polinômio interpolador de Lagrange em um ponto x
+    
+    Parâmetros:
+    x -- ponto onde calcular o valor do polinômio
+    x_tab -- array numpy com os pontos x de interpolação
+    y_tab -- array numpy com os valores correspondentes y
+    
+    Retorna:
+    Valor do polinômio interpolador em x
+    """
     n = len(x_tab)
-    soma = 0
+    soma = np.zeros_like(x)  # Inicializa com zeros usando o dtype correto
     
     for i in range(n):
-        l = 1  # Inicializa o polinômio base L_k(x)
+        l = np.ones_like(x)  # Inicializa o polinômio base L_k(x)
         
         for j in range(n):
-            if i != j:  # Evita divisão por zero
+            if i != j:  
                 l *= (x - x_tab[j]) / (x_tab[i] - x_tab[j])
+                
+        soma += y_tab[i] * l
         
-        soma += y_tab[i] * l  # Soma ponderada pelos valores y
-    
     return soma
+
+# Exemplo de uso
+x_tab = np.array([-1., 0., 2.])  # Pontos x de exemplo
+y_tab = np.array([4., 1., -1.])  # Valores y correspondentes
+
+# Criar pontos para plotagem suave
+x_plot = np.linspace(min(x_tab)-0.5, max(x_tab)+0.5, 1000)
+y_plot = Lagrange(x_plot, x_tab, y_tab)
+
+# Plotar o gráfico
+plt.figure(figsize=(10, 6))
+plt.plot(x_plot, y_plot, 'b-', label='Polinômio Interpolador')
+plt.scatter(x_tab, y_tab, color='red', marker='o', s=100, 
+           label='Pontos de Interpolação')
+
+plt.grid(True)
+plt.legend()
+plt.title('Interpolação Polinomial de Lagrange')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.show()
