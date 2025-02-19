@@ -1,3 +1,5 @@
+# OBS: CORRIGIR ERRO 2.00e+00 NO GRÁFICO
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -14,17 +16,15 @@ def FormaDeNewton(x_tab, y_tab):
     """
     n = len(x_tab)
     coeficientes = np.zeros(n)
+    diferenças = y_tab.copy()  # Inicializa com os valores y
     
-    # Calcula as diferenças divididas
-    for i in range(n):
-        if i == 0:
-            coeficientes[i] = y_tab[i]
-        else:
-            # Calcula a diferença dividida de ordem i
-            numerador = y_tab[i] - FormaDeNewton(x_tab[:i+1], y_tab[:i+1])[i-1]
-            denominador = np.prod(x_tab[i] - x_tab[:i])
-            coeficientes[i] = numerador / denominador
-            
+    # Calcula as diferenças divididas iterativamente
+    for ordem in range(1, n):
+        for i in range(n - ordem):
+            # Calcula a diferença dividida de ordem atual
+            diferenças[i] = (diferenças[i + 1] - diferenças[i]) / (x_tab[i + ordem] - x_tab[i])
+        coeficientes[ordem] = diferenças[0]
+    
     return coeficientes
 
 def avalia_newton(x, x_tab, coeficientes):
