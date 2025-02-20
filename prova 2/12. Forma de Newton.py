@@ -1,5 +1,3 @@
-# OBS: CORRIGIR ERRO 2.00e+00 NO GRÁFICO
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -25,6 +23,9 @@ def FormaDeNewton(x_tab, y_tab):
             diferenças[i] = (diferenças[i + 1] - diferenças[i]) / (x_tab[i + ordem] - x_tab[i])
         coeficientes[ordem] = diferenças[0]
     
+    # O primeiro coeficiente é simplesmente y[0]
+    coeficientes[0] = y_tab[0]
+    
     return coeficientes
 
 def avalia_newton(x, x_tab, coeficientes):
@@ -49,7 +50,7 @@ def avalia_newton(x, x_tab, coeficientes):
 
 # Exemplo de uso
 x_tab = np.array([1., 2., 3., 4.])
-y_tab = np.array([2., 3., 5., 7.])
+y_tab = np.array([5., 3., 5., 7.])
 
 # Calcula os coeficientes
 coeficientes = FormaDeNewton(x_tab, y_tab)
@@ -70,5 +71,13 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
 
-print("Coeficientes do polinômio de Newton:")
+# Salva o gráfico em vez de mostrá-lo diretamente
+plt.savefig('grafico_newton.png', bbox_inches='tight', dpi=300)
+
+print("\nVerificação dos pontos:")
+for i in range(len(x_tab)):
+    valor_calculado = avalia_newton(x_tab[i], x_tab, coeficientes)
+    print(f"Ponto ({x_tab[i]}, {y_tab[i]}): valor calculado = {valor_calculado:.2f}")
+
+print("\nCoeficientes do polinômio de Newton:")
 print(coeficientes)
