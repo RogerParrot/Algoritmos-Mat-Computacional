@@ -60,6 +60,7 @@ x_plot = np.linspace(min(x_tab)-0.5, max(x_tab)+0.5, 1000)
 y_plot = np.array([avalia_newton(x, x_tab, coeficientes) for x in x_plot])
 
 # Plotagem
+plt.figure(figsize=(10, 6))
 plt.plot(x_plot, y_plot, 'b-', label='Polinômio de Newton')
 plt.scatter(x_tab, y_tab, color='red', marker='o', s=100, 
            label='Pontos de Interpolação')
@@ -69,9 +70,6 @@ plt.title('Interpolação Polinomial de Newton')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
-
-# Salva o gráfico em vez de mostrá-lo diretamente
-plt.savefig('grafico_newton.png', bbox_inches='tight', dpi=300)
 
 print("\nVerificação dos pontos:")
 for i in range(len(x_tab)):
