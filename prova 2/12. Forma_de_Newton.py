@@ -49,8 +49,8 @@ def avalia_newton(x, x_tab, coeficientes):
     return resultado
 
 # Exemplo de uso
-x_tab = np.array([1., 2., 3., 4.])
-y_tab = np.array([5., 3., 5., 7.])
+x_tab = np.array([1., 2., 4.])
+y_tab = np.array([2., 3., 5.])
 
 # Calcula os coeficientes
 coeficientes = FormaDeNewton(x_tab, y_tab)

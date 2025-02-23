@@ -1,34 +1,66 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def newton_cotes(a, b, n, f):
-    x = np.linspace(a, b, n + 1)  # Divisão do intervalo em n subintervalos
-    h = (b - a) / n  # Espaçamento entre pontos
+# Achar os coeficientes
+def FormaDeNewton(x_tab, y_tab):
+    """
+    Calcula o polinômio interpolador usando a forma de Newton
+    
+    Parâmetros:
+    x_tab -- array numpy com os pontos x de interpolação
+    y_tab -- array numpy com os valores correspondentes y
+    
+    Retorna:
+    coeficientes -- array com os coeficientes do polinômio de Newton
+    """
+    n = len(x_tab)
+    coeficientes = np.zeros(n)
+    diferenças = y_tab.copy()  # Inicializa com os valores y
+    
+    # Calcula as diferenças divididas iterativamente
+    for ordem in range(1, n):
+        for i in range(n - ordem):
+            # Calcula a diferença dividida de ordem atual
+            diferenças[i] = (diferenças[i + 1] - diferenças[i]) / (x_tab[i + ordem] - x_tab[i])
+        coeficientes[ordem] = diferenças[0]
+    
+    # O primeiro coeficiente é simplesmente y[0]
+    coeficientes[0] = y_tab[0]
+    
+    return coeficientes
 
-    # Coeficientes de Newton-Cotes para regras simples (exemplo: Trapézio)
-    if n == 1:  
-        A = np.array([1, 1]) * (h / 2)  # Regra do Trapézio
-    elif n == 2:
-        A = np.array([1, 4, 1]) * (h / 3)  # Regra de Simpson 1/3
-    elif n == 3:
-        A = np.array([1, 3, 3, 1]) * (3 * h / 8)  # Regra de Simpson 3/8
-    else:
-        raise ValueError("Apenas regras de grau até 3 são suportadas no momento.")
-
-    integral = np.sum(A * f(x))  # Aplicação da fórmula de Newton-Cotes
-
-    # Gráfico da função e dos pontos usados na quadratura
-    plt.plot(x, f(x), 'bo-', label="Amostras da função")
-    plt.fill_between(x, f(x), alpha=0.3, color="gray")
-    plt.xlabel("x")
-    plt.ylabel("f(x)")
-    plt.title("Integração por Newton-Cotes")
-    plt.legend()
-    plt.show()
-
+# Achar a integral aproximada da original
+def newton_cotes_integral(f, a, b, n):
+    """
+    Calcula a integral da função f(x) no intervalo [a, b] usando a fórmula de Newton-Cotes.
+    
+    Parâmetros:
+    f -- função a ser integrada
+    a -- limite inferior de integração
+    b -- limite superior de integração
+    n -- número de pontos (grau do polinômio interpolador + 1)
+    
+    Retorna:
+    Aproximação da integral de f(x) de a até b
+    """
+    x_tab = np.linspace(a, b, n)  # Define pontos igualmente espaçados
+    y_tab = f(x_tab)  # Avalia a função nesses pontos
+    
+    # Passo de integração
+    h = (b - a) / (n - 1)
+    
+    # Coeficientes do polinômio de Newton
+    coeficientes = FormaDeNewton(x_tab, y_tab)
+    
+    # Cálculo da integral aproximada
+    integral = h * np.sum(coeficientes * y_tab)
+    
     return integral
 
-# Exemplo de uso com uma função simples
-f = lambda x: np.sin(x)  # Função a ser integrada
-resultado = newton_cotes(0, np.pi, 2, f)
-print("Valor da integral aproximada:", resultado)
+# Exemplo de chamada (pode remover ou adaptar conforme desejar)
+
+f = lambda x: (x**3 - 4*x + 2)  # função para aproximar
+a, b = 1, 3                     # intervalos
+n = 5                           # grau 4 + 1 pontos
+
+resultado = newton_cotes_integral(f, a, b, n)
+print(f"Aproximação da integral de {a} até {b} = {resultado}")
