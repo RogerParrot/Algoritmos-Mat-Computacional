@@ -1,55 +1,45 @@
 import numpy as np
 
-def regra_1terco_simpson(f, a, b, tam_div=1):
+def regra_1terco_simpson(f, a, b, intervalo=["quantidade de intervalos", 1]):
     """
     Implementa a Regra de Simpson de 1/3 para aproximar integrais definidas.
     
     Parâmetros:
-        f: função de dentro da integral a ser integrada
+        f: função a ser integrada
         a: limite inferior da integral
         b: limite superior da integral
-        tam_div: tamanho de cada subdivisão do intervalo [a, b]
-        
-    Retorna:
-        Aproximação da integral usando a Regra de Simpson de 1/3
+        tam_int: tamanho dos intervalos (opcional)
+        quant_interv: número de intervalos (opcional)
     """
-    # Verifica se o tamanho da divisão é válido
-    if tam_div <= 0:
-        raise ValueError("O tamanho da divisão (tam_div) deve ser maior que zero.")
+    # Calcula o número de pontos baseado na quantidade de intervalos ou no tamanho dos intervalos
+    # Quantidade de pontos é 1 a mais do que a quantidade de subintervalos
+    if intervalo[0] == "tamanho dos intervalos":
+        n = int((b - a)/intervalo[1])
+        quant_pts = n + 1
+    elif intervalo[0] == "quantidade de intervalos":
+        n = intervalo[1]
+        quant_pts = n + 1
+
+    # Gera os pontos x
+    x = np.linspace(a, b, quant_pts)
     
-    # Calcula o número de subintervalos
-    num_subintervalos = int((b - a) / tam_div)
+    # Calcula os valores da função
+    y = f(x)
     
-    # Ajusta o tamanho da divisão para garantir que o intervalo seja coberto corretamente
-    h = (b - a) / num_subintervalos
+    # Aplica a Regra de Simpson de 1/3
+    h = x[1] - x[0]
+    soma_pontos_finais = y[0] + y[-1]
+    soma_pontos_medios = np.sum(y[1:-1:2]) * 4  # Pontos ímpares multiplicados por 4
+    soma_pontos_pares = np.sum(y[2:-1:2]) * 2   # Pontos pares multiplicados por 2
     
-    # Inicializa a integral
-    integral = 0.0
-    
-    # Aplica a Regra de Simpson de 1/3 em cada subintervalo
-    for i in range(num_subintervalos):
-        # Define os limites do subintervalo
-        x0 = a + i * h
-        x1 = x0 + h
-        
-        # Ponto médio do subintervalo
-        pt_medio = (x0 + x1) / 2
-        
-        # Aplica a fórmula da Regra de Simpson de 1/3 no subintervalo
-        integral += h * (f(x0) + 4 * f(pt_medio) + f(x1)) / 6
+    integral = (h/3) * (soma_pontos_finais + soma_pontos_medios + soma_pontos_pares)
     
     return integral
 
 def f(x):
-    """
-    Caso de teste: x*e^x
-    Função que está dentro da integral
-    """
+    """Função teste: x*e^x"""
     return np.e**x
 
 # Exemplo de uso
-a, b = 1, 2  # Limites de integração
-tam_div = 0.1    # Tamanho de cada subdivisão
-
-resultado = regra_1terco_simpson(f, a, b)
-print(f"Resultado da regra de Simpson: {resultado:.06f}")
+resultado = regra_1terco_simpson(f, 1.6, 2.0)
+print(f"Resultado da integral: {resultado:.06f}")

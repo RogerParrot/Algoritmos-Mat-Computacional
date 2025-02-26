@@ -29,7 +29,7 @@ def FormaDeNewton(x_tab, y_tab):
     return coeficientes
 
 # Achar a integral aproximada da original
-def newton_cotes_integral(f, a, b, tam_div=1, quant_interv=2):
+def newton_cotes_integral(f, a, b, intervalo=["quantidade de intervalos", 1]):
     """
     Calcula a integral da função f(x) no intervalo [a, b] usando a fórmula de Newton-Cotes.
     
@@ -44,13 +44,20 @@ def newton_cotes_integral(f, a, b, tam_div=1, quant_interv=2):
     Aproximação da integral de f(x) de a até b
     """
 
-    # Calcula o número de pontos com base no tamanho da divisão
-    n = int((b - a) / tam_div) + 1  # +1 para incluir o ponto final
-    x_tab = np.linspace(a, b, n)  # Define pontos igualmente espaçados
+    # Calcula o número de pontos baseado na quantidade de intervalos ou no tamanho dos intervalos
+    # Quantidade de pontos é 1 a mais do que a quantidade de subintervalos
+    if intervalo[0] == "tamanho dos intervalos":
+        n = int((b - a)/intervalo[1])
+        quant_pts = n + 1
+    elif intervalo[0] == "quantidade de intervalos":
+        n = intervalo[1]
+        quant_pts = n + 1
+    
+    x_tab = np.linspace(a, b, quant_pts)  # Define pontos igualmente espaçados
     y_tab = f(x_tab)  # Avalia a função nesses pontos
     
     # Passo de integração
-    h = (b - a) / (n - 1)
+    h = (b - a) / (quant_pts - 1)
     
     # Coeficientes do polinômio de Newton
     coeficientes = FormaDeNewton(x_tab, y_tab)
@@ -64,7 +71,6 @@ def newton_cotes_integral(f, a, b, tam_div=1, quant_interv=2):
 
 f = lambda x: (x**3 - 4*x + 2)  # função para aproximar
 a, b = 1, 3                     # intervalos
-tam_div = 0.5                   # tamanho de cada subdivisão
 
-resultado = newton_cotes_integral(f, a, b, tam_div)
+resultado = newton_cotes_integral(f, a, b)
 print(f"Aproximação da integral de {a} até {b} = {resultado}")

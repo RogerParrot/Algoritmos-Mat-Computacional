@@ -1,6 +1,6 @@
 import numpy as np
 
-def regra_dos_trapezios(f, a, b, h=1, quant_interv=2):
+def regra_dos_trapezios(f, a, b, intervalo=["quantidade de intervalos", 1]):
     """
     Implementa a regra dos trapézios para aproximar uma integral.
     
@@ -11,11 +11,17 @@ def regra_dos_trapezios(f, a, b, h=1, quant_interv=2):
         h: tamanho do intervalo (opcional)
         quant_interv: número de intervalos (opcional)
     """
-    # Calcula o número de pontos baseado em quant_interv ou h
-    n = max(int((b-a)/h), quant_interv)
-    
+    # Calcula o número de pontos baseado na quantidade de intervalos ou no tamanho dos intervalos
+    # Quantidade de pontos é 1 a mais do que a quantidade de subintervalos
+    if intervalo[0] == "tamanho dos intervalos":
+        n = int((b - a)/intervalo[1])
+        quant_pts = n + 1
+    elif intervalo[0] == "quantidade de intervalos":
+        n = intervalo[1]
+        quant_pts = n + 1
+
     # Gera os pontos x
-    x = np.linspace(a, b, n+1)
+    x = np.linspace(a, b, quant_pts)
     
     # Calcula os valores da função
     y = f(x)
@@ -30,13 +36,7 @@ def f(x):
     Função exemplo para teste.
     Neste caso, uma função senoidal simples.
     """
-    return np.sin(x)
+    return x*(np.e**x)
 
 # Exemplo de uso com diferentes números de intervalos
-resultado_10 = regra_dos_trapezios(f, 0, np.pi, quant_interv=10)
-resultado_100 = regra_dos_trapezios(f, 0, np.pi, quant_interv=100)
-resultado_h01 = regra_dos_trapezios(f, 0, np.pi, h=0.1)
-
-print(f"Aproximação com 10 intervalos: {resultado_10:.6f}")
-print(f"Aproximação com 100 intervalos: {resultado_100:.6f}")
-print(f"Aproximação com o tamanho do intervalo sendo 0,1: {resultado_h01:.6f}")
+print(f"Aproximação da integral: {regra_dos_trapezios(f, 1.6, 2.0, ["quantidade de intervalos", 4])}")
