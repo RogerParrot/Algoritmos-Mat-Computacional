@@ -18,6 +18,7 @@ def Lagrange(x, x_tab, y_tab):
     
     for i in range(n):
         l = np.ones_like(x)  # Inicializa o polinômio base L_k(x)
+        print(l)
         
         for j in range(n):
             if i != j:  
