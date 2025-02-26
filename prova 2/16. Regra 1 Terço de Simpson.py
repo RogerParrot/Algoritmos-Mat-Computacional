@@ -1,6 +1,6 @@
 import numpy as np
 
-def regra_1terco_simpson(f, a, b):
+def regra_1terco_simpson(f, a, b, h=1, quant_interv=1):
     """
     Implementa a Regra de Simpson de 1/3 para aproximar integrais definidas.
     
@@ -30,7 +30,7 @@ def f(x):
     Caso de teste: x*e^x
     Função que está dentro da integral
     """
-    return x*(np.e**x)
+    return (np.e)**x
 
 m = regra_1terco_simpson(f, 1.6, 2.0)
 

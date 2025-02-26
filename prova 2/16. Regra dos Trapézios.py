@@ -1,6 +1,6 @@
 import numpy as np
 
-def regra_dos_trapezios(f, a, b, h=1, quant_interv=1):
+def regra_dos_trapezios(f, a, b, h=1, quant_interv=2):
     """
     Implementa a regra dos trapézios para aproximar uma integral.
     
